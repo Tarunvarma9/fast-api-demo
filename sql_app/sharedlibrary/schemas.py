@@ -10,10 +10,12 @@ class UserBase(BaseModel):
 
 
 class User(UserBase):
-    id: int
     user_name: str
     email: str
     password: str
-    
     class Config:
         orm_mode = True
+        
+class Data(BaseModel):
+    user_name:str
+    password:str
