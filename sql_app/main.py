@@ -2,8 +2,7 @@ from typing import List
 import jwt
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic.utils import is_valid_field
-from sqlalchemy import schema
-from sqlalchemy.orm import Session, session
+from sqlalchemy.orm import Session
 import shelve
 from passlib.context import CryptContext
 from sqlalchemy.sql.functions import current_user, user
@@ -27,7 +26,7 @@ def get_db():
 s = shelve.open("test", writeback = True)
 s['auth'] = []        
 
-pwd_context= CryptContext(schemas=["bcrypt"],deprecated='auto')
+pwd_context= CryptContext(schemes=["bcrypt"],deprecated='auto')
 
 
 @app.get("/users_details/")
@@ -80,7 +79,8 @@ def create_user(request:schemas.User,db: Session = Depends(get_db)):
 @app.post('/login')
 def login(request:schemas.Data,db:Session= Depends(get_db)):
     current_user=db.query(models.User).filter(models.User.user_name == request.user_name).first()
-    is_valid=current_user.password==request.password
+    hashedPassword = current_user.password
+    is_valid=pwd_context.verify(request.password, hashedPassword)
     if is_valid:
         return "user found"
     return "user not found"

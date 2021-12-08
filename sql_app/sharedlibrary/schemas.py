@@ -1,5 +1,4 @@
 from typing import List, Optional, Text
-
 from pydantic import BaseModel
 from sqlalchemy.sql.sqltypes import TEXT,INTEGER
 
@@ -17,5 +16,7 @@ class User(UserBase):
         orm_mode = True
         
 class Data(BaseModel):
-    user_name:str
-    password:str
+    user_name: str
+    password: str
+    class Config:
+        orm_mode = True
