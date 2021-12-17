@@ -20,3 +20,7 @@ class Data(BaseModel):
     password: str
     class Config:
         orm_mode = True
+class Token(BaseModel):
+    jwt_token:str
+    class Config:
+        orm_mode = True
